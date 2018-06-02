@@ -49,7 +49,7 @@ objects = [str(star_list['ra'].as_matrix()[i]) +
 parallax_objects = pd.DataFrame(columns=['MAIN_ID',
                                          'RA_d',
                                          'DEC_d',
-                                         'PLX_VALUE',
+                                         'FOUND_VALUE',
                                          'readable_ra',
                                          'readable_dec'])
 # ----loop over the objects provided in "parallax_query_objects.csv"-----
@@ -60,12 +60,12 @@ for coords in objects:
     these_have_parallaxes = pd.DataFrame(columns=['MAIN_ID',
                                                   'RA_d',
                                                   'DEC_d',
-                                                  'PLX_VALUE',
+                                                  'FOUND_VALUE',
                                                   'readable_ra',
                                                   'readable_dec'])
     # this step strips away stars without measured parallaxes
     these_have_parallaxes = pd.concat([these_have_parallaxes,
-                                       df[df['PLX_VALUE'].notnull()]])
+                                       df[df['FOUND_VALUE'].notnull()]])
 
     for i in these_have_parallaxes.index:
         addthis = FK5((these_have_parallaxes.loc[i, 'RA_d'] * u.deg),
@@ -83,7 +83,7 @@ np.save("parallax_objects_values.npy", parallax_objects.values)
 now = datetime.datetime.now()
 parallax_objects.to_csv("parallax_objects{0}.csv".format(now.strftime("%B_%d_%Y_%H:%M:%S")),
                         columns=['MAIN_ID',
-                                 'PLX_VALUE',
+                                 'FOUND_VALUE',
                                  'readable_ra',
                                  'readable_dec'],
                         header=['Object name',
